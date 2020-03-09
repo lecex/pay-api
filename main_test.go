@@ -11,24 +11,6 @@ import (
 	payPB "github.com/lecex/pay-api/proto/pay"
 )
 
-func TestPermissions(t *testing.T) {
-	// Sync 同步权限
-	// permissions, _ := json.Marshal(Conf.Permissions)
-	// fmt.Println(permissions)
-}
-
-func TestMobileBuild(t *testing.T) {
-	h := handler.Pay{}
-	req := &payPB.Request{
-		Verify: "632541",
-		Uuid:   "asfdasfasfasafsafs",
-	}
-	res := &payPB.Response{}
-	err := h.MobileBuild(context.TODO(), req, res)
-	// fmt.Println(req, res, err)
-	t.Log(req, res, err)
-}
-
 func TestPayGet(t *testing.T) {
 	h := handler.Pay{}
 	req := &payPB.Request{
