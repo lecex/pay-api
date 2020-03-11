@@ -5,6 +5,8 @@ package config;
 service Configs {
     // 用户通过 token 自己更新数据 
     rpc SelfUpdate(Request) returns (Response) {}
+     // 根据 唯一 获取用户
+    rpc Info(Request) returns (Response) {}
     // 获取配置列表
     rpc List(Request) returns (Response) {}
     // 根据 唯一 获取配置

@@ -36,6 +36,8 @@ var _ server.Option
 type ConfigsService interface {
 	// 用户通过 token 自己更新数据
 	SelfUpdate(ctx context.Context, in *Request, opts ...client.CallOption) (*Response, error)
+	// 根据 唯一 获取用户
+	Info(ctx context.Context, in *Request, opts ...client.CallOption) (*Response, error)
 	// 获取配置列表
 	List(ctx context.Context, in *Request, opts ...client.CallOption) (*Response, error)
 	// 根据 唯一 获取配置
@@ -62,6 +64,16 @@ func NewConfigsService(name string, c client.Client) ConfigsService {
 
 func (c *configsService) SelfUpdate(ctx context.Context, in *Request, opts ...client.CallOption) (*Response, error) {
 	req := c.c.NewRequest(c.name, "Configs.SelfUpdate", in)
+	out := new(Response)
+	err := c.c.Call(ctx, req, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *configsService) Info(ctx context.Context, in *Request, opts ...client.CallOption) (*Response, error) {
+	req := c.c.NewRequest(c.name, "Configs.Info", in)
 	out := new(Response)
 	err := c.c.Call(ctx, req, out, opts...)
 	if err != nil {
@@ -125,6 +137,8 @@ func (c *configsService) Delete(ctx context.Context, in *Request, opts ...client
 type ConfigsHandler interface {
 	// 用户通过 token 自己更新数据
 	SelfUpdate(context.Context, *Request, *Response) error
+	// 根据 唯一 获取用户
+	Info(context.Context, *Request, *Response) error
 	// 获取配置列表
 	List(context.Context, *Request, *Response) error
 	// 根据 唯一 获取配置
@@ -140,6 +154,7 @@ type ConfigsHandler interface {
 func RegisterConfigsHandler(s server.Server, hdlr ConfigsHandler, opts ...server.HandlerOption) error {
 	type configs interface {
 		SelfUpdate(ctx context.Context, in *Request, out *Response) error
+		Info(ctx context.Context, in *Request, out *Response) error
 		List(ctx context.Context, in *Request, out *Response) error
 		Get(ctx context.Context, in *Request, out *Response) error
 		Create(ctx context.Context, in *Request, out *Response) error
@@ -159,6 +174,10 @@ type configsHandler struct {
 
 func (h *configsHandler) SelfUpdate(ctx context.Context, in *Request, out *Response) error {
 	return h.ConfigsHandler.SelfUpdate(ctx, in, out)
+}
+
+func (h *configsHandler) Info(ctx context.Context, in *Request, out *Response) error {
+	return h.ConfigsHandler.Info(ctx, in, out)
 }
 
 func (h *configsHandler) List(ctx context.Context, in *Request, out *Response) error {

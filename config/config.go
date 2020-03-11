@@ -25,7 +25,8 @@ var Conf config.Config = config.Config{
 		{Service: "pay-api", Method: "Orders.Update", Auth: true, Policy: true, Name: "更新订单", Description: "更新订单信息。"},
 		{Service: "pay-api", Method: "Orders.List", Auth: true, Policy: true, Name: "订单列表", Description: "查询订单列表"},
 		// 配置管理
-		{Service: "pay-api", Method: "Configs.SelfUpdate", Auth: true, Policy: true, Name: "登陆更新支付配置", Description: "登陆用户更新支付配置信息"},
+		{Service: "pay-api", Method: "Configs.SelfUpdate", Auth: true, Policy: false, Name: "更新登陆用户支付配置", Description: "更新登陆用户支付配置信息"},
+		{Service: "pay-api", Method: "Configs.Info", Auth: true, Policy: false, Name: "获取登陆用户支付配置", Description: "获取登陆用户支付配置信息"},
 		{Service: "pay-api", Method: "Configs.Create", Auth: true, Policy: true, Name: "创建支付配置", Description: "创建新角色权限。"},
 		{Service: "pay-api", Method: "Configs.Delete", Auth: true, Policy: true, Name: "删除支付配置", Description: "删除支付配置。"},
 		{Service: "pay-api", Method: "Configs.Update", Auth: true, Policy: true, Name: "更新支付配置", Description: "更新支付配置信息。"},
