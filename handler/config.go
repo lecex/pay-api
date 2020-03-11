@@ -17,7 +17,15 @@ type Config struct {
 
 // SelfUpdate 配置列表
 func (srv *Config) SelfUpdate(ctx context.Context, req *pb.Request, res *pb.Response) (err error) {
-	return client.Call(ctx, srv.ServiceName, "Configs.SelfUpdate", req, res)
+	// meta["Userid"] 通过 meta 获取用户 id --- So this function needs token to use
+	meta, _ := metadata.FromContext(ctx)
+	if userID, ok := meta["Userid"]; ok {
+		req.Config.Id = userID
+		return client.Call(ctx, srv.ServiceName, "Configs.SelfUpdate", req, res)
+	} else {
+		return errors.New("更新用户失败,未找到用户ID")
+	}
+	return err
 }
 
 // Info 获取用户支付信息
