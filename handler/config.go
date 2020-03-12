@@ -72,7 +72,5 @@ func (srv *Config) Update(ctx context.Context, req *pb.Request, res *pb.Response
 
 // Delete 删除配置
 func (srv *Config) Delete(ctx context.Context, req *pb.Request, res *pb.Response) (err error) {
-	return client.Call(ctx, srv.ServiceName, "Configs.Delete", &pb.Config{
-		Id: req.Config.Id,
-	}, res)
+	return client.Call(ctx, srv.ServiceName, "Configs.Delete", req, res)
 }
