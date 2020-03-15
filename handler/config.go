@@ -21,6 +21,9 @@ func (srv *Config) SelfUpdate(ctx context.Context, req *pb.Request, res *pb.Resp
 	meta, _ := metadata.FromContext(ctx)
 	if userID, ok := meta["Userid"]; ok {
 		req.Config.Id = userID
+		if Username, ok := meta["Username"]; ok {
+			req.Config.Username = Username
+		}
 		return client.Call(ctx, srv.ServiceName, "Configs.SelfUpdate", req, res)
 	} else {
 		return errors.New("更新用户失败,未找到用户ID")
