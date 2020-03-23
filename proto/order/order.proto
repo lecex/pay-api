@@ -3,11 +3,13 @@ syntax = "proto3";
 package order;
 
 service Orders {
+    // 查询自己的订单
+    rpc SelfList(Request) returns (Response) {}
     // 获取订单列表
     rpc List(Request) returns (Response) {}
     // 根据 唯一 获取订单
     rpc Get(Request) returns (Response) {}
-    // 创建订单
+    // // 创建订单
     // rpc Create(Request) returns (Response) {}
     // 更新订单
     rpc Update(Request) returns (Response) {}

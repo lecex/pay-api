@@ -2,8 +2,11 @@ package handler
 
 import (
 	"context"
+	"errors"
+	"fmt"
 
 	client "github.com/lecex/core/client"
+	"github.com/micro/go-micro/v2/metadata"
 
 	pb "github.com/lecex/pay-api/proto/order"
 )
@@ -11,6 +14,19 @@ import (
 // Order 订单结构
 type Order struct {
 	ServiceName string
+}
+
+// SelfList 查询自己的订单列表
+func (srv *Order) SelfList(ctx context.Context, req *pb.Request, res *pb.Response) (err error) {
+	// meta["Userid"] 通过 meta 获取用户 id --- So this function needs token to use
+	meta, _ := metadata.FromContext(ctx)
+	if userID, ok := meta["Userid"]; ok {
+		req.ListQuery.Where = fmt.Sprintf("store_id = '%s' AND ", userID)
+		return client.Call(ctx, srv.ServiceName, "Orders.List", req, res)
+	} else {
+		return errors.New("更新用户失败,未找到用户ID")
+	}
+	return err
 }
 
 // List 订单列表
