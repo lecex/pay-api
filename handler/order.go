@@ -21,12 +21,15 @@ func (srv *Order) SelfList(ctx context.Context, req *pb.Request, res *pb.Respons
 	// meta["Userid"] 通过 meta 获取用户 id --- So this function needs token to use
 	meta, _ := metadata.FromContext(ctx)
 	if userID, ok := meta["Userid"]; ok {
-		req.ListQuery.Where = fmt.Sprintf("AND store_id = '%s' %s", userID, req.ListQuery.Where)
+		where := "true"
+		if req.ListQuery.Where != "" {
+			where = req.ListQuery.Where
+		}
+		req.ListQuery.Where = fmt.Sprintf("%s AND store_id = '%s'", where, userID)
 		return client.Call(ctx, srv.ServiceName, "Orders.List", req, res)
 	} else {
 		return errors.New("更新用户失败,未找到用户ID")
 	}
-	return err
 }
 
 // List 订单列表
