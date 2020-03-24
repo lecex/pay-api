@@ -16,6 +16,22 @@ type Order struct {
 	ServiceName string
 }
 
+// SelfAmount 查询自己的订单收款总金额
+func (srv *Order) SelfAmount(ctx context.Context, req *pb.Request, res *pb.Response) (err error) {
+	// meta["Userid"] 通过 meta 获取用户 id --- So this function needs token to use
+	meta, _ := metadata.FromContext(ctx)
+	if userID, ok := meta["Userid"]; ok {
+		where := "true"
+		if req.ListQuery.Where != "" {
+			where = req.ListQuery.Where
+		}
+		req.ListQuery.Where = fmt.Sprintf("%s AND store_id = '%s' AND stauts = true", where, userID)
+		return client.Call(ctx, srv.ServiceName, "Orders.Amount", req, res)
+	} else {
+		return errors.New("获取用户失败,未找到用户ID")
+	}
+}
+
 // SelfList 查询自己的订单列表
 func (srv *Order) SelfList(ctx context.Context, req *pb.Request, res *pb.Response) (err error) {
 	// meta["Userid"] 通过 meta 获取用户 id --- So this function needs token to use
@@ -28,7 +44,7 @@ func (srv *Order) SelfList(ctx context.Context, req *pb.Request, res *pb.Respons
 		req.ListQuery.Where = fmt.Sprintf("%s AND store_id = '%s'", where, userID)
 		return client.Call(ctx, srv.ServiceName, "Orders.List", req, res)
 	} else {
-		return errors.New("更新用户失败,未找到用户ID")
+		return errors.New("获取用户失败,未找到用户ID")
 	}
 }
 
