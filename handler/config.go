@@ -22,7 +22,7 @@ func (srv *Config) SelfUpdate(ctx context.Context, req *pb.Request, res *pb.Resp
 	if userID, ok := meta["Userid"]; ok {
 		req.Config.Id = userID
 		if Username, ok := meta["Username"]; ok {
-			req.Config.Username = Username
+			req.Config.StoreName = Username
 		}
 		return client.Call(ctx, srv.ServiceName, "Configs.SelfUpdate", req, res)
 	} else {
