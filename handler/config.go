@@ -25,10 +25,8 @@ func (srv *Config) SelfUpdate(ctx context.Context, req *pb.Request, res *pb.Resp
 			req.Config.StoreName = Username
 		}
 		return client.Call(ctx, srv.ServiceName, "Configs.SelfUpdate", req, res)
-	} else {
-		return errors.New("更新用户失败,未找到用户ID")
 	}
-	return err
+	return errors.New("更新用户失败,未找到用户ID")
 }
 
 // Info 获取用户支付信息
