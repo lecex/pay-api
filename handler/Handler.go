@@ -9,7 +9,6 @@ import (
 	server "github.com/micro/go-micro/v2/server"
 
 	client "github.com/lecex/core/client"
-	"github.com/lecex/core/env"
 	configPB "github.com/lecex/pay-api/proto/config"
 	healthPB "github.com/lecex/pay-api/proto/health"
 	orderPB "github.com/lecex/pay-api/proto/order"
@@ -28,10 +27,9 @@ var Conf = config.Conf
 
 // Register 注册
 func (srv *Handler) Register() {
-	PayService := env.Getenv("PAY_NAME", "pay")
-	orderPB.RegisterOrdersHandler(srv.Server, &Order{PayService})
-	configPB.RegisterConfigsHandler(srv.Server, &Config{PayService})
-	payPB.RegisterPaysHandler(srv.Server, &Pay{PayService})
+	orderPB.RegisterOrdersHandler(srv.Server, &Order{Conf.Service["pay"]})
+	configPB.RegisterConfigsHandler(srv.Server, &Config{Conf.Service["pay"]})
+	payPB.RegisterPaysHandler(srv.Server, &Pay{Conf.Service["pay"]})
 	healthPB.RegisterHealthHandler(srv.Server, &Health{})
 
 	go Sync() // 同步前端权限
@@ -44,7 +42,7 @@ func Sync() {
 		Permissions: Conf.Permissions,
 	}
 	res := &PB.Response{}
-	err := client.Call(context.TODO(), Conf.UserService, "Permissions.Sync", req, res)
+	err := client.Call(context.TODO(), Conf.Service["user"], "Permissions.Sync", req, res)
 	if err != nil {
 		log.Log(err)
 		Sync()

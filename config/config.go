@@ -14,9 +14,12 @@ import (
 //	Name // 权限名称
 //	Description // 权限解释
 var Conf config.Config = config.Config{
-	Service:     env.Getenv("MICRO_API_NAMESPACE", "go.micro.api") + "pay-api",
-	Version:     "latest",
-	UserService: env.Getenv("USER_NAME", "user"),
+	Name:    env.Getenv("MICRO_API_NAMESPACE", "go.micro.api.") + "pay-api",
+	Version: "latest",
+	Service: map[string]string{
+		"user": env.Getenv("USER_NAME", "go.micro.srv.user"),
+		"pay":  env.Getenv("PAY_NAME", "go.micro.srv.pay"),
+	},
 	Permissions: []*PB.Permission{
 		// 支付管理
 		{Service: "pay-api", Method: "Pays.AopF2F", Auth: false, Policy: false, Name: "商家扫用户", Description: "商家扫用户付款码付款。"},
