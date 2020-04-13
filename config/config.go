@@ -14,7 +14,7 @@ import (
 //	Name // 权限名称
 //	Description // 权限解释
 var Conf config.Config = config.Config{
-	Service:     "go.micro.api.pay-api",
+	Service:     env.Getenv("MICRO_API_NAMESPACE", "go.micro.api") + "pay-api",
 	Version:     "latest",
 	UserService: env.Getenv("USER_NAME", "user"),
 	Permissions: []*PB.Permission{
