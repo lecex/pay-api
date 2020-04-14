@@ -11,6 +11,7 @@ import (
 	client "github.com/lecex/core/client"
 	configPB "github.com/lecex/pay-api/proto/config"
 	healthPB "github.com/lecex/pay-api/proto/health"
+	notifyPB "github.com/lecex/pay-api/proto/notify"
 	orderPB "github.com/lecex/pay-api/proto/order"
 	payPB "github.com/lecex/pay-api/proto/pay"
 
@@ -31,6 +32,7 @@ func (srv *Handler) Register() {
 	configPB.RegisterConfigsHandler(srv.Server, &Config{Conf.Service["pay"]})
 	payPB.RegisterPaysHandler(srv.Server, &Pay{Conf.Service["pay"]})
 	healthPB.RegisterHealthHandler(srv.Server, &Health{})
+	notifyPB.RegisterNotifyHandler(srv.Server, &Notify{})
 
 	go Sync() // 同步前端权限
 }
