@@ -31,8 +31,8 @@ func (srv *Handler) Register() {
 	orderPB.RegisterOrdersHandler(srv.Server, &Order{Conf.Service["pay"]})
 	configPB.RegisterConfigsHandler(srv.Server, &Config{Conf.Service["pay"]})
 	payPB.RegisterPaysHandler(srv.Server, &Pay{Conf.Service["pay"]})
+	notifyPB.RegisterNotifyHandler(srv.Server, &Notify{Conf.Service["pay"]})
 	healthPB.RegisterHealthHandler(srv.Server, &Health{})
-	notifyPB.RegisterNotifyHandler(srv.Server, &Notify{})
 
 	go Sync() // 同步前端权限
 }
