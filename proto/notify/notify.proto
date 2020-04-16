@@ -3,10 +3,11 @@ syntax = "proto3";
 package notify;
 
 service Notify {
-    // Notify 异步通知
-    rpc Notify(Request) returns (Response) {}
+    // Alipay 异步通知
+    rpc Alipay(Request) returns (Response) {}
+    // Wechat 异步通知
+    rpc Wechat(Request) returns (Response) {}
 }
-
 message Pair {
 	string key = 1;
 	repeated string values = 2;

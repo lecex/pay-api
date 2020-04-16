@@ -12,7 +12,12 @@ type Notify struct {
 	ServiceName string
 }
 
-// Notify 用户是否存在
-func (srv *Notify) Notify(ctx context.Context, req *pb.Request, res *pb.Response) (err error) {
-	return client.Call(ctx, srv.ServiceName, "Notify.Notify", req, res)
+// Alipay 用户是否存在
+func (srv *Notify) Alipay(ctx context.Context, req *pb.Request, res *pb.Response) (err error) {
+	return client.Call(ctx, srv.ServiceName, "Notify.Alipay", req, res)
+}
+
+// Wechat 用户是否存在
+func (srv *Notify) Wechat(ctx context.Context, req *pb.Request, res *pb.Response) (err error) {
+	return client.Call(ctx, srv.ServiceName, "Notify.Wechat", req, res)
 }

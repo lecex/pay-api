@@ -34,8 +34,10 @@ var _ server.Option
 // Client API for Notify service
 
 type NotifyService interface {
-	// Notify 异步通知
-	Notify(ctx context.Context, in *Request, opts ...client.CallOption) (*Response, error)
+	// Alipay 异步通知
+	Alipay(ctx context.Context, in *Request, opts ...client.CallOption) (*Response, error)
+	// Wechat 异步通知
+	Wechat(ctx context.Context, in *Request, opts ...client.CallOption) (*Response, error)
 }
 
 type notifyService struct {
@@ -50,8 +52,18 @@ func NewNotifyService(name string, c client.Client) NotifyService {
 	}
 }
 
-func (c *notifyService) Notify(ctx context.Context, in *Request, opts ...client.CallOption) (*Response, error) {
-	req := c.c.NewRequest(c.name, "Notify.Notify", in)
+func (c *notifyService) Alipay(ctx context.Context, in *Request, opts ...client.CallOption) (*Response, error) {
+	req := c.c.NewRequest(c.name, "Notify.Alipay", in)
+	out := new(Response)
+	err := c.c.Call(ctx, req, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *notifyService) Wechat(ctx context.Context, in *Request, opts ...client.CallOption) (*Response, error) {
+	req := c.c.NewRequest(c.name, "Notify.Wechat", in)
 	out := new(Response)
 	err := c.c.Call(ctx, req, out, opts...)
 	if err != nil {
@@ -63,13 +75,16 @@ func (c *notifyService) Notify(ctx context.Context, in *Request, opts ...client.
 // Server API for Notify service
 
 type NotifyHandler interface {
-	// Notify 异步通知
-	Notify(context.Context, *Request, *Response) error
+	// Alipay 异步通知
+	Alipay(context.Context, *Request, *Response) error
+	// Wechat 异步通知
+	Wechat(context.Context, *Request, *Response) error
 }
 
 func RegisterNotifyHandler(s server.Server, hdlr NotifyHandler, opts ...server.HandlerOption) error {
 	type notify interface {
-		Notify(ctx context.Context, in *Request, out *Response) error
+		Alipay(ctx context.Context, in *Request, out *Response) error
+		Wechat(ctx context.Context, in *Request, out *Response) error
 	}
 	type Notify struct {
 		notify
@@ -82,6 +97,10 @@ type notifyHandler struct {
 	NotifyHandler
 }
 
-func (h *notifyHandler) Notify(ctx context.Context, in *Request, out *Response) error {
-	return h.NotifyHandler.Notify(ctx, in, out)
+func (h *notifyHandler) Alipay(ctx context.Context, in *Request, out *Response) error {
+	return h.NotifyHandler.Alipay(ctx, in, out)
+}
+
+func (h *notifyHandler) Wechat(ctx context.Context, in *Request, out *Response) error {
+	return h.NotifyHandler.Wechat(ctx, in, out)
 }

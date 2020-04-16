@@ -70,7 +70,5 @@ func (srv *Order) Update(ctx context.Context, req *pb.Request, res *pb.Response)
 
 // Delete 删除订单
 // func (srv *Order) Delete(ctx context.Context, req *pb.Request, res *pb.Response) (err error) {
-// 	return client.Call(ctx, srv.ServiceName, "Orders.Delete", &pb.Order{
-// 		Id: req.Order.Id,
-// 	}, res)
+// 	return client.Call(ctx, srv.ServiceName, "Orders.Delete", req, res)
 // }
