@@ -17,8 +17,8 @@ var Conf config.Config = config.Config{
 	Name:    env.Getenv("MICRO_API_NAMESPACE", "go.micro.api.") + "pay-api",
 	Version: "latest",
 	Service: map[string]string{
-		"user": env.Getenv("USER_NAME", "go.micro.srv.user"),
-		"pay":  env.Getenv("PAY_NAME", "go.micro.srv.pay"),
+		"user": env.Getenv("USER_SERVICE", "go.micro.srv.user"),
+		"pay":  env.Getenv("PAY_SERVICE", "go.micro.srv.pay"),
 	},
 	Permissions: []*PB.Permission{
 		// 支付管理
