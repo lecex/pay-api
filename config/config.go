@@ -23,6 +23,9 @@ var Conf config.Config = config.Config{
 	Permissions: []*PB.Permission{
 		// 支付管理
 		{Service: "pay-api", Method: "Pays.AopF2F", Auth: false, Policy: false, Name: "商家扫用户", Description: "商家扫用户付款码付款。"},
+		// 支付通知
+		{Service: "pay-api", Method: "Notify.Alipay", Auth: false, Policy: false, Name: "支付宝支付通知", Description: "支付宝支付回调通知"},
+		{Service: "pay-api", Method: "Notify.Wechat", Auth: false, Policy: false, Name: "微信支付通知", Description: "微信支付回调通知"},
 		// 订单管理
 		{Service: "pay-api", Method: "Orders.Get", Auth: true, Policy: true, Name: "查询订单", Description: "查询订单信息权限。"},
 		{Service: "pay-api", Method: "Orders.Update", Auth: true, Policy: true, Name: "更新订单", Description: "更新订单信息。"},
