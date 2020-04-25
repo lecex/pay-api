@@ -17,3 +17,8 @@ type Pay struct {
 func (srv *Pay) AopF2F(ctx context.Context, req *pb.Request, res *pb.Response) (err error) {
 	return client.Call(ctx, srv.ServiceName, "Pays.AopF2F", req, res)
 }
+
+// Query 订单查询
+func (srv *Pay) Query(ctx context.Context, req *pb.Request, res *pb.Response) (err error) {
+	return client.Call(ctx, srv.ServiceName, "Pays.Query", req, res)
+}
