@@ -34,8 +34,10 @@ var _ server.Option
 // Client API for Orders service
 
 type OrdersService interface {
-	// 查询自己总和
+	// 查询自己订单总和
 	SelfAmount(ctx context.Context, in *Request, opts ...client.CallOption) (*Response, error)
+	// 查询自己手续费
+	SelfFee(ctx context.Context, in *Request, opts ...client.CallOption) (*Response, error)
 	// 查询自己的订单
 	SelfList(ctx context.Context, in *Request, opts ...client.CallOption) (*Response, error)
 	// 获取订单列表
@@ -62,6 +64,16 @@ func NewOrdersService(name string, c client.Client) OrdersService {
 
 func (c *ordersService) SelfAmount(ctx context.Context, in *Request, opts ...client.CallOption) (*Response, error) {
 	req := c.c.NewRequest(c.name, "Orders.SelfAmount", in)
+	out := new(Response)
+	err := c.c.Call(ctx, req, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *ordersService) SelfFee(ctx context.Context, in *Request, opts ...client.CallOption) (*Response, error) {
+	req := c.c.NewRequest(c.name, "Orders.SelfFee", in)
 	out := new(Response)
 	err := c.c.Call(ctx, req, out, opts...)
 	if err != nil {
@@ -113,8 +125,10 @@ func (c *ordersService) Update(ctx context.Context, in *Request, opts ...client.
 // Server API for Orders service
 
 type OrdersHandler interface {
-	// 查询自己总和
+	// 查询自己订单总和
 	SelfAmount(context.Context, *Request, *Response) error
+	// 查询自己手续费
+	SelfFee(context.Context, *Request, *Response) error
 	// 查询自己的订单
 	SelfList(context.Context, *Request, *Response) error
 	// 获取订单列表
@@ -130,6 +144,7 @@ type OrdersHandler interface {
 func RegisterOrdersHandler(s server.Server, hdlr OrdersHandler, opts ...server.HandlerOption) error {
 	type orders interface {
 		SelfAmount(ctx context.Context, in *Request, out *Response) error
+		SelfFee(ctx context.Context, in *Request, out *Response) error
 		SelfList(ctx context.Context, in *Request, out *Response) error
 		List(ctx context.Context, in *Request, out *Response) error
 		Get(ctx context.Context, in *Request, out *Response) error
@@ -148,6 +163,10 @@ type ordersHandler struct {
 
 func (h *ordersHandler) SelfAmount(ctx context.Context, in *Request, out *Response) error {
 	return h.OrdersHandler.SelfAmount(ctx, in, out)
+}
+
+func (h *ordersHandler) SelfFee(ctx context.Context, in *Request, out *Response) error {
+	return h.OrdersHandler.SelfFee(ctx, in, out)
 }
 
 func (h *ordersHandler) SelfList(ctx context.Context, in *Request, out *Response) error {
