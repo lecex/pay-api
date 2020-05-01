@@ -25,7 +25,7 @@ func (srv *Order) SelfAmount(ctx context.Context, req *pb.Request, res *pb.Respo
 		if req.ListQuery.Where != "" {
 			where = req.ListQuery.Where
 		}
-		req.ListQuery.Where = fmt.Sprintf("%s AND store_id = '%s' AND stauts = true", where, userID)
+		req.ListQuery.Where = fmt.Sprintf("%s AND store_id = '%s' AND stauts = 1", where, userID)
 		return client.Call(ctx, srv.ServiceName, "Orders.Amount", req, res)
 	} else {
 		return errors.New("获取用户失败,未找到用户ID")
@@ -41,7 +41,7 @@ func (srv *Order) SelfFee(ctx context.Context, req *pb.Request, res *pb.Response
 		if req.ListQuery.Where != "" {
 			where = req.ListQuery.Where
 		}
-		req.ListQuery.Where = fmt.Sprintf("%s AND store_id = '%s' AND stauts = true", where, userID)
+		req.ListQuery.Where = fmt.Sprintf("%s AND store_id = '%s' AND stauts = 1", where, userID)
 		return client.Call(ctx, srv.ServiceName, "Orders.Fee", req, res)
 	} else {
 		return errors.New("获取用户失败,未找到用户ID")
