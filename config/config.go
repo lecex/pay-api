@@ -32,6 +32,7 @@ var Conf config.Config = config.Config{
 		{Service: "pay-api", Method: "Orders.List", Auth: true, Policy: true, Name: "订单列表", Description: "查询订单列表"},
 		{Service: "pay-api", Method: "Orders.SelfList", Auth: true, Policy: false, Name: "本账户订单列表", Description: "本账户订单列表。"},
 		{Service: "pay-api", Method: "Orders.SelfAmount", Auth: true, Policy: false, Name: "本账户订单统计", Description: "本账户订单统计。"},
+		{Service: "pay-api", Method: "Orders.SelfFee", Auth: true, Policy: false, Name: "本账户手续费统计", Description: "本账户手续费统计。"},
 		// 配置管理
 		{Service: "pay-api", Method: "Configs.SelfUpdate", Auth: true, Policy: false, Name: "更新登陆用户支付配置", Description: "更新登陆用户支付配置信息"},
 		{Service: "pay-api", Method: "Configs.Info", Auth: true, Policy: false, Name: "获取登陆用户支付配置", Description: "获取登陆用户支付配置信息"},
