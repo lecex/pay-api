@@ -34,6 +34,8 @@ var _ server.Option
 // Client API for Orders service
 
 type OrdersService interface {
+	// 查询订单总和
+	Amount(ctx context.Context, in *Request, opts ...client.CallOption) (*Response, error)
 	// 查询自己订单总和
 	SelfAmount(ctx context.Context, in *Request, opts ...client.CallOption) (*Response, error)
 	// 查询自己手续费
@@ -60,6 +62,16 @@ func NewOrdersService(name string, c client.Client) OrdersService {
 		c:    c,
 		name: name,
 	}
+}
+
+func (c *ordersService) Amount(ctx context.Context, in *Request, opts ...client.CallOption) (*Response, error) {
+	req := c.c.NewRequest(c.name, "Orders.Amount", in)
+	out := new(Response)
+	err := c.c.Call(ctx, req, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
 }
 
 func (c *ordersService) SelfAmount(ctx context.Context, in *Request, opts ...client.CallOption) (*Response, error) {
@@ -125,6 +137,8 @@ func (c *ordersService) Update(ctx context.Context, in *Request, opts ...client.
 // Server API for Orders service
 
 type OrdersHandler interface {
+	// 查询订单总和
+	Amount(context.Context, *Request, *Response) error
 	// 查询自己订单总和
 	SelfAmount(context.Context, *Request, *Response) error
 	// 查询自己手续费
@@ -143,6 +157,7 @@ type OrdersHandler interface {
 
 func RegisterOrdersHandler(s server.Server, hdlr OrdersHandler, opts ...server.HandlerOption) error {
 	type orders interface {
+		Amount(ctx context.Context, in *Request, out *Response) error
 		SelfAmount(ctx context.Context, in *Request, out *Response) error
 		SelfFee(ctx context.Context, in *Request, out *Response) error
 		SelfList(ctx context.Context, in *Request, out *Response) error
@@ -159,6 +174,10 @@ func RegisterOrdersHandler(s server.Server, hdlr OrdersHandler, opts ...server.H
 
 type ordersHandler struct {
 	OrdersHandler
+}
+
+func (h *ordersHandler) Amount(ctx context.Context, in *Request, out *Response) error {
+	return h.OrdersHandler.Amount(ctx, in, out)
 }
 
 func (h *ordersHandler) SelfAmount(ctx context.Context, in *Request, out *Response) error {

@@ -16,6 +16,16 @@ type Order struct {
 	ServiceName string
 }
 
+// Amount 查询订单收款总金额
+func (srv *Order) Amount(ctx context.Context, req *pb.Request, res *pb.Response) (err error) {
+	where := "true"
+	if req.ListQuery.Where != "" {
+		where = req.ListQuery.Where
+	}
+	req.ListQuery.Where = fmt.Sprintf("%s AND stauts = 1", where)
+	return client.Call(ctx, srv.ServiceName, "Orders.Amount", req, res)
+}
+
 // SelfAmount 查询自己的订单收款总金额
 func (srv *Order) SelfAmount(ctx context.Context, req *pb.Request, res *pb.Response) (err error) {
 	// meta["Userid"] 通过 meta 获取用户 id --- So this function needs token to use
