@@ -3,8 +3,6 @@ syntax = "proto3";
 package order;
 
 service Orders {
-    // 查询订单总和
-    rpc Amount(Request) returns (Response) {}
     // 查询自己订单总和
     rpc SelfAmount(Request) returns (Response) {}
     // 查询自己手续费
