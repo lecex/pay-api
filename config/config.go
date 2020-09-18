@@ -23,6 +23,11 @@ var Conf config.Config = config.Config{
 	Permissions: []*PB.Permission{
 		// 支付管理
 		{Service: "pay-api", Method: "Pays.AopF2F", Auth: false, Policy: false, Name: "商家扫用户", Description: "商家扫用户付款码付款。"},
+		{Service: "pay-api", Method: "Pays.Query", Auth: false, Policy: false, Name: "交易查询", Description: "订单交易查询。"},
+		{Service: "pay-api", Method: "Pays.Cancel", Auth: true, Policy: false, Name: "取消交易", Description: "交易订单取消,已付款则退款。"},
+		{Service: "pay-api", Method: "Pays.Refund", Auth: true, Policy: false, Name: "交易退款", Description: "交易订单退款。"},
+		{Service: "pay-api", Method: "Pays.OpenRefund", Auth: false, Policy: false, Name: "商家扫用户", Description: "商家扫用户付款码付款。"},
+		{Service: "pay-api", Method: "Pays.AffirmRefund", Auth: true, Policy: false, Name: "商家扫用户", Description: "商家扫用户付款码付款。"},
 		// 支付通知
 		{Service: "pay-api", Method: "Notify.Alipay", Auth: false, Policy: false, Name: "支付宝支付通知", Description: "支付宝支付回调通知"},
 		{Service: "pay-api", Method: "Notify.Wechat", Auth: false, Policy: false, Name: "微信支付通知", Description: "微信支付回调通知"},
